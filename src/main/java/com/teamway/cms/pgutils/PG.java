@@ -398,7 +398,6 @@ public interface PG {
 	public static final int CPTYPE_ALARM = 33;//
 	public static final int CPTYPE_VIDEODATA = 34;//视频信息结构体
 	public static final int CPTYPE_AUDIODATA = 35;//音频信息结构体
-	public static final int CPTYPE_VIDEOTRANS = 36;//视频传输配置结构体
 	public static final int CPTYPE_AUDIOTRANS = 37;//音频传输配置结构体
 	public static final int CPTYPE_STREAMTYPE = 38;//码流类型
 	public static final int CPTYPE_DATAACK = 39;//数据接收返回信息结构体

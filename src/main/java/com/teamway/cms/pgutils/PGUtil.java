@@ -21,12 +21,13 @@ public class PGUtil
 	 * @param pgCode
 	 * @param sessionId
 	 * @param seqNum
-	 * @param attrTypes 属相类型数组
+	 * @param attrTypes 属性类型数组
 	 * @param attrValues 属性值对象数组
 	 * @return PG对象
 	 */
 	public static PGPojo  newInstancePGObject(int pgCode,int sessionId,int seqNum,byte[] attrTypes,Object[] attrValues)
 	{
+		
 		if( (attrTypes==null && attrValues!=null) || (attrTypes!=null && attrValues==null) || (attrTypes!=null && attrValues!=null && attrTypes.length !=attrValues.length )   ){
 			return null;
 		}
