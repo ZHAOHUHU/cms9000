@@ -4,7 +4,7 @@ public class test {
     public static void main(String[] args) {
 
 
-               zhaotest.CPCOT_REQ();
+               zhaotest.CPCODE_SET_IPINFOR_REQ();
     }
 
 }
