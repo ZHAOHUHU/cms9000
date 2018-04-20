@@ -317,6 +317,7 @@ public interface PG {
     public static final int CPCODE_START_ALARM_INFO_REQ = 2130;
     public static final int CPCODE_START_ALARM_INFO_RSP = 2131;
     public static final int CPCODE_SEND_ALARMONLINE_INFO_REQ = 2132;
+
     public static final int CPCODE_SEND_ENV_INFO_REQ = 2133;
     public static final int CPCODE_SEND_ALARM_INFO_REQ = 2134;
     //////
@@ -381,6 +382,7 @@ public interface PG {
     /*读取导轨运行速度*/
     public static final int GET_SLIDERAIL_PARAM_REQ = 15003;
     public static final int GET_SLIDERAIL_PARAM_RSP = 15004;
+
 
     //add by xj; 2014-02-11
     //设置子设备id
@@ -595,6 +597,40 @@ public interface PG {
             this.uiTimeStamp = uiTimeStamp;
         }
     }
+    public class CPTYPE_STORAGEDATA {
+        int id;
+        int type;
+        byte[] starttime = new byte[32];
+        byte[] stoptime = new byte[32];
+        byte[] filename = new byte[128];
+        byte[] url = new byte[256];
+        int icompression;
+
+        public CPTYPE_STORAGEDATA(int id, int type, byte[] starttime, byte[] stoptime, byte[] filename, byte[] url, int icompression) {
+            this.id = id;
+            this.type = type;
+            System.arraycopy(starttime, 0, this.starttime, 0, starttime.length);
+            System.arraycopy(stoptime, 0, this.stoptime, 0, stoptime.length);
+            System.arraycopy(filename, 0, this.filename, 0, filename.length);
+            System.arraycopy(url, 0, this.url, 0, url.length);
+            this.icompression = icompression;
+        }
+    }
+    public static final int chaxunluxiang = 12;
+
+    public class chaxunluxiang {
+        int id;
+        int type;
+        byte[] starttime = new byte[32];
+        byte[] stoptime = new byte[32];
+
+        public chaxunluxiang(int id, int type, byte[] starttime, byte[] stoptime) {
+            this.id = id;
+            this.type = type;
+            System.arraycopy(starttime, 0, this.starttime, 0, starttime.length);
+            System.arraycopy(stoptime, 0, this.stoptime, 0, stoptime.length);
+        }
+    }
 
     public static final int SPTYPE_DATAACK = 39;//数据接收返回信息结构体
 
@@ -788,6 +824,39 @@ public interface PG {
     public static final int CPTYPE_DOORCTRL_DATA = 98;//
     public static final int CPTYPE_DOORCTRL_CFG = 99;//
     public static final int CPTYPE_RPUNAME = 101;// RPU名称信息结构体
+    public  static  class  neibushebei{
+        long iSubDevId; // 各个内部设备的具体编号，
+        byte[] szSubDevDesc=new byte[32]; // 内部设备描
+
+        public neibushebei(long iSubDevId, byte[] szSubDevDesc) {
+            this.iSubDevId = iSubDevId;
+            System.arraycopy(szSubDevDesc, 0, this.szSubDevDesc, 0, szSubDevDesc.length);
+        }
+    }
+    public class CPTYPE_IPCNAME{
+        byte[] szIPCName=new byte[128]; // 平台统一命名
+        byte[] iIPCId=new byte[8]; // 平台统一编号
+        int iIPCMajorType; // 主类型，当前为 1
+        int iIPCMinorType; // 子类型，当前为 1
+        byte[]szIPCModel=new byte[32]; // 只读，不可更改
+        byte[]szIPCSerialId=new byte[64]; // 只读，不可更改
+        byte[] szIPCVersion=new byte[64]; // 只读，不可更改
+        int iSubDevIdNum; // 内部设备数量，
+        neibushebei[]  shebiei=new neibushebei[iSubDevIdNum];
+
+        public CPTYPE_IPCNAME(byte[] szIPCName, byte[] iIPCId, int iIPCMajorType, int iIPCMinorType, byte[] szIPCModel, byte[] szIPCSerialId, byte[] szIPCVersion, int iSubDevIdNum, neibushebei[] shebiei) {
+            System.arraycopy(szIPCName, 0, this.szIPCName, 0, szIPCName.length);
+            System.arraycopy(iIPCId, 0, this.iIPCId, 0, iIPCId.length);
+            this.iIPCMajorType = iIPCMajorType;
+            this.iIPCMinorType = iIPCMinorType;
+            this.iSubDevIdNum = iSubDevIdNum;
+            System.arraycopy(szIPCModel, 0, this.szIPCModel, 0, szIPCModel.length);
+            System.arraycopy(szIPCSerialId, 0, this.szIPCSerialId, 0, szIPCSerialId.length);
+            System.arraycopy(szIPCVersion, 0, this.szIPCVersion, 0, szIPCVersion.length);
+            this.shebiei = shebiei;
+        }
+    }
+
     public static final int CPTYPE_SVCADDR = 102;// RPU 服务器地址
 
     public class CPTYPE_SVCADDR {

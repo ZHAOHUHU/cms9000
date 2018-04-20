@@ -21,12 +21,12 @@ public class zhaotest {
    */
     public static void CPCODE_STOP_TALK_RQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
             PGPojo info = PGUtil.newInstancePGObject(2203, 0, 28, new byte[]{PG.CPTYPE_AUDIOTRANCFG},
-                    new Object[]{new PG.CPTYPE_AUDIOTRANCFG(1, 1, 1, "192.168.12.60".getBytes(), 9800, "192.168.12.188".getBytes(), 9800, 1)});
+                    new Object[]{new PG.CPTYPE_AUDIOTRANCFG(1, 1, 1, "192.168.12.31".getBytes(), 9800, "192.168.12.188".getBytes(), 9800, 1)});
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
                             new PG.CPTYPE_USERINFOR("admin".getBytes(), "123456".getBytes(), (short) 1, (short) 1)});
@@ -51,12 +51,12 @@ public class zhaotest {
      */
     public static void CPCODE_START_VIDEO_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
             PGPojo info = PGUtil.newInstancePGObject(2108, 0, 27, new byte[]{PG.CPTYPE_VIDEOTRANCFG},
-                    new Object[]{new PG.CPTYPE_VIDEOTRANCFG(1, 1, 7, "192.168.12.60".getBytes(), 0, 1)});
+                    new Object[]{new PG.CPTYPE_VIDEOTRANCFG(1, 1, 7, "192.168.12.31".getBytes(), 0, 1)});
 
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
@@ -84,7 +84,7 @@ public class zhaotest {
      */
     public static void CPCODE_REPOREVDATA() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -117,7 +117,7 @@ public class zhaotest {
      */
     public static void CPCODE_SET_ALARM_CFG_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -150,7 +150,7 @@ public class zhaotest {
      */
     public static void CPCODE_SET_ALMSUBCRIPTION_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -183,16 +183,16 @@ public class zhaotest {
      */
     public static void CPCODE_SET_ALMDPLOY_REQ() {
         try {
-            Socket s = new Socket("192.168.12.201", 9000);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
-            PGPojo info = PGUtil.newInstancePGObject(1261, 0, 20, new byte[]{PG.CPTYPE_ALMDEPLO},
+            PGPojo info = PGUtil.newInstancePGObject(1263, 0, 20, new byte[]{PG.CPTYPE_ALMDEPLO},
                     new Object[]{new PG.CPTYPE_ALMDEPLO((long) 1, 12, 0, 1, 12)});
 
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
-                            new PG.CPTYPE_USERINFOR("admin".getBytes(), "teamway123456".getBytes(), (short) 1, (short) 1)});
+                            new PG.CPTYPE_USERINFOR("admin".getBytes(), "123456".getBytes(), (short) 1, (short) 1)});
 
 
             byte[] bytes1 = PGUtil.pgObjectToByteArray(info);
@@ -217,7 +217,7 @@ public class zhaotest {
      */
     public static void CPCODE_GET_IPINFR_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -250,7 +250,7 @@ public class zhaotest {
      */
     public static void CPOT_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -283,7 +283,7 @@ public class zhaotest {
      */
     public static void CPCODE_GET_IPINR_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -313,11 +313,11 @@ public class zhaotest {
     }
 
     /*
-    1127
+    1127 重启
      */
     public static void CPCODET_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -350,7 +350,7 @@ public class zhaotest {
      */
     public static void CPCODE_GET_PTZPRESET_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -381,7 +381,7 @@ public class zhaotest {
     /*
     1073 和1013一个毛病啊没有头
      */
-    public static void CPCODE_GET_IPINFO_REQ() {
+    public static void CPCODE_GET_TIMEINFO_REQ() {
         try {
             Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
@@ -418,7 +418,7 @@ public class zhaotest {
      */
     public static void CPCODE_GET_ENCODECG_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             final InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -451,7 +451,7 @@ public class zhaotest {
      */
     public static void CPCODE_TER_RSP() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -481,7 +481,7 @@ public class zhaotest {
      */
     public static void CPCODE_REGISTER_RSP() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -512,12 +512,12 @@ public class zhaotest {
         */
     public static void CPCODE_STOP_TALK_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
             PGPojo info = PGUtil.newInstancePGObject(2206, 0, 28, new byte[]{PG.CPTYPE_AUDIOTRANCFG},
-                    new Object[]{new PG.CPTYPE_AUDIOTRANCFG(1, 1, 1, "192.168.12.188".getBytes(), 9800, "192.162.12.60".getBytes(), 1, 1)});
+                    new Object[]{new PG.CPTYPE_AUDIOTRANCFG(1, 1, 1, "192.168.12.188".getBytes(), 9800, "192.162.12.31".getBytes(), 1, 1)});
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
                             new PG.CPTYPE_USERINFOR("admin".getBytes(), "123456".getBytes(), (short) 1, (short) 1)});
@@ -543,7 +543,7 @@ public class zhaotest {
      */
     public static void CPCODE_START_TALK_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -579,13 +579,13 @@ public class zhaotest {
      */
     public static void CPCODE_START_VDEO_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
             PGPojo info = PGUtil.newInstancePGObject(2105, 0, 27, new byte[]{PG.CPTYPE_VIDEOTRANCFG},
-                    new Object[]{new PG.CPTYPE_VIDEOTRANCFG(1, 1, 2,"192.168.12.60".getBytes(), 9800, 16)});
-            System.out.println("192.168.12.60".getBytes().length);
+                    new Object[]{new PG.CPTYPE_VIDEOTRANCFG(1, 1, 2,"192.168.12.31".getBytes(), 9800, 16)});
+            System.out.println("192.168.12.31".getBytes().length);
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
                             new PG.CPTYPE_USERINFOR("admin".getBytes(), "123456".getBytes(), (short) 1, (short) 1)});
@@ -612,7 +612,7 @@ public class zhaotest {
      */
     public static void SPCODE_ACK() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -646,7 +646,7 @@ public class zhaotest {
      */
     public static void CPCODE_EXTERNAL_CTRL_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -681,7 +681,7 @@ public class zhaotest {
      */
     public static void CPCODE_REPORENVDATA() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -716,7 +716,7 @@ public class zhaotest {
      */
     public static void CPCODE_SET_ALARM_CFG_RQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -751,7 +751,7 @@ public class zhaotest {
      */
     public static void CPCODE_SET_ALMSUBSCRIPTION_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -780,11 +780,11 @@ public class zhaotest {
     }
 
     /*
-    1263比1261少了几个结构体
+    1263少了几个结构体
      */
     public static void CPCODE_GET_ALMDEPLOY_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -818,7 +818,7 @@ public class zhaotest {
      */
     public static void CPCODE_SET_ALMDEPLOY_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -852,12 +852,12 @@ public class zhaotest {
      */
     public static void CPCODE_SET_HIDEAREA_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
             PGPojo info = PGUtil.newInstancePGObject(1241, 0, 19, new byte[]{PG.CPTYPE_HIDEAREA},
-                    new Object[]{new PG.CPTYPE_HIDEAREA(1, 12, 14, 20, 95)});
+                    new Object[]{new PG.CPTYPE_HIDEAREA(1, 142, 134, 20, 20)});
 
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
@@ -886,7 +886,7 @@ public class zhaotest {
       */
     public static void CPCODE_SET_MANAGECFG_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -920,7 +920,7 @@ public class zhaotest {
      */
     public static void CPCODE_GET_LOGINFOR_REQ() {
         try {
-            Socket s = new Socket("192.168.12.201", 9000);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -931,7 +931,7 @@ public class zhaotest {
 
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
-                            new PG.CPTYPE_USERINFOR("admin".getBytes(), "teamway123456".getBytes(), (short) 1, (short) 1)});
+                            new PG.CPTYPE_USERINFOR("admin".getBytes(), "123456".getBytes(), (short) 1, (short) 1)});
 
 
             byte[] bytes1 = PGUtil.pgObjectToByteArray(info);
@@ -956,7 +956,7 @@ public class zhaotest {
      */
     public static void CPCODE_SET_PTZHOME_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -990,7 +990,7 @@ public class zhaotest {
      */
     public static void CPCOT_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -1023,7 +1023,7 @@ public class zhaotest {
      */
     public static void CPCODE_SET_PTZPRESET_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -1056,12 +1056,12 @@ public class zhaotest {
      */
     public static void CPCODE_CTL_PTZ_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
             PGPojo info = PGUtil.newInstancePGObject(1097, 0, 13, new byte[]{PG.CPTYPE_CTLPTZ},
-                    new Object[]{new PG.CPTYPE_CTLPTZ(1, 2, new int[]{6})});
+                    new Object[]{new PG.CPTYPE_CTLPTZ(1, 1, new int[]{0})});
 
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
@@ -1095,7 +1095,7 @@ public class zhaotest {
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
             PGPojo info = PGUtil.newInstancePGObject(1071, 0, 12, new byte[]{PG.CPTYPE_SYSTIME, PG.CPTYPE_NTPSERVER, PG.CPTYPE_TIMEZONE},
-                    new Object[]{new PG.CPTYPE_SYSTIME(2018, 3, 29, 8, 12, 52), new PG.CPTYPE_NTPSERVER("192.168.12.60".getBytes(), "192.168.12.60".getBytes(), "192.168.12.60".getBytes()), new PG.CPTYPE_TIMEZONE(1, new byte[]{12})
+                    new Object[]{new PG.CPTYPE_SYSTIME(2018, 4, 5, 8, 46, 52), new PG.CPTYPE_NTPSERVER("10.0.0.1".getBytes(), "10.0.0.2".getBytes(), "10.0.0.3".getBytes()), new PG.CPTYPE_TIMEZONE(1, new byte[]{12})
                     });
 
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
@@ -1124,7 +1124,7 @@ public class zhaotest {
      */
     public static void CPCODE_GET_RPUSYSCFG_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -1157,12 +1157,12 @@ public class zhaotest {
      */
     public static void CPCODE_SET_RPUSYSCFG_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
             PGPojo info = PGUtil.newInstancePGObject(1065, 0, 10, new byte[]{PG.CPTYPE_SVCADDR},
-                    new Object[]{new PG.CPTYPE_SVCADDR("192.168.12.188".getBytes(), (short) 9908, (short) 1, 1)});
+                    new Object[]{new PG.CPTYPE_IPCNAME("dsfs".getBytes(),"1".getBytes(),1,1,"sdf".getBytes(),"dsf".getBytes(),"df".getBytes(),1,new PG.neibushebei[]{new PG.neibushebei(2,"ds".getBytes())})});
 
             System.out.println();
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
@@ -1198,7 +1198,7 @@ public class zhaotest {
      */
     public static void CPCODE_SET_OSDCFG_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -1237,7 +1237,7 @@ public class zhaotest {
      */
     public static void CPCODE_GET_ENCODECFG_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             final InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -1270,12 +1270,12 @@ public class zhaotest {
      */
     public static void CPCODE_SET_ENCODECFG_REQ() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
             PGPojo info = PGUtil.newInstancePGObject(1041, 0, 7, new byte[]{PG.CPTYPE_ENCODE},
-                    new Object[]{new PG.CPTYPE_ENCODE(1, 16, 1080, 2, 5, 21, 1000, 2, 0)});
+                    new Object[]{new PG.CPTYPE_ENCODE(1, 16, 720, 2, 5, 25, 1000, 50, 0)});
 
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
@@ -1303,13 +1303,13 @@ public class zhaotest {
      */
     public static void CPCODE_DEL_UCPCODE_DEL_U() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
             PGPojo info = PGUtil.newInstancePGObject(1035, 0, 6, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
-                            new PG.CPTYPE_USERINFOR("gouzi".getBytes(), "789456".getBytes(), (short) 1, (short) 1)});
+                            new PG.CPTYPE_USERINFOR("kkkkk".getBytes(), "654321".getBytes(), (short) 1, (short) 1)});
 
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
@@ -1337,7 +1337,7 @@ public class zhaotest {
      */
     public static void CPCODE_GET_USERINFOR_REQ() {
         try {
-            Socket s = new Socket("192.168.12.30", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -1371,7 +1371,7 @@ public class zhaotest {
      */
     public static void CPCODE_SET_USERINFOR_REQ() {
         try {
-            Socket s = new Socket("192.168.12.201", 9000);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
@@ -1381,7 +1381,7 @@ public class zhaotest {
 
             PGPojo info1 = PGUtil.newInstancePGObject(PG.LOGIN_REQ, 0, 1, new byte[]{PG.CPTYPE_USERINFO},
                     new Object[]{
-                            new PG.CPTYPE_USERINFOR("admin".getBytes(), "teamway123456".getBytes(), (short) 1, (short) 1)});
+                            new PG.CPTYPE_USERINFOR("admin".getBytes(), "123456".getBytes(), (short) 1, (short) 1)});
 
 
             byte[] bytes1 = PGUtil.pgObjectToByteArray(info);
@@ -1437,7 +1437,7 @@ public class zhaotest {
      */
     public static void CPCODE_SET_IPINFOR_REQ() {
         try {
-            Socket s = new Socket("192.168.12.29", 9800);
+            Socket s = new Socket("192.168.12.55", 9800);
             final InputStream is = s.getInputStream();
             final OutputStream out = s.getOutputStream();
             PGPojo bean = PGUtil.newInstancePGObject(PG.SET_IPINFO_REQ, 0, 2, new byte[]{PG.CPTYPE_IPINFO},
@@ -1465,7 +1465,7 @@ public class zhaotest {
      */
     public static void CPTYPE_USERINFO() {
         try {
-            Socket s = new Socket("192.168.12.60", 9800);
+            Socket s = new Socket("192.168.12.31", 9800);
             // 构建IO
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();

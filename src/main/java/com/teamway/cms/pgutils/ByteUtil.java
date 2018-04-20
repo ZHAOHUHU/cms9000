@@ -1,6 +1,18 @@
 package com.teamway.cms.pgutils;
 
-public class ByteUtil {  
+public class ByteUtil {
+
+    public static byte[] toByteArray(short[] src) {
+
+        int count = src.length;
+        byte[] dest = new byte[count << 1];
+        for (int i = 0; i < count; i++) {
+            dest[i * 2] = (byte) (src[i] >> 8);
+            dest[i * 2 + 1] = (byte) (src[i] >> 0);
+        }
+
+        return dest;
+    }
     /** 
      * 转换short为byte 
      *  
