@@ -5,6 +5,9 @@ import com.teamway.cms.pgutils.PGPojo;
 import com.teamway.cms.pgutils.PGUtil;
 
 import java.io.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,108 +15,148 @@ import java.util.Properties;
 
 public class VideoContro {
     public static void main(String[] args) throws IOException, InterruptedException {
+        final int videoId = Integer.parseInt(VideoContro.getUrlValue("videoId"));
+        final int udpPort = Integer.parseInt(VideoContro.getUrlValue("udpPort"));
+        final int type = Integer.parseInt(VideoContro.getUrlValue("type"));
+        int seqNum = Integer.parseInt(VideoContro.getUrlValue("seqNum"));
+        final String startTime = VideoContro.getUrlValue("startTime");
+        final String stopTime = VideoContro.getUrlValue("stopTime");
+        final String CSeq = VideoContro.getUrlValue("CSeq");
+        final int sessionId1 = Integer.parseInt(VideoContro.getUrlValue("sessionId1"));
+        final int sessionId2 = Integer.parseInt(VideoContro.getUrlValue("sessionId2"));
         Socket s = new Socket("192.168.12.32", 8998);
         // 构建IO
         InputStream is = s.getInputStream();
         OutputStream os = s.getOutputStream();
-        PGPojo info = PGUtil.newInstancePGObject(1441, 0, 0, new byte[]{63},
-                new Object[]{new PG.chaxunluxiang(3, 1, "2018-04-19 08:08:08".getBytes(), "2018-04-19 09:08:08".getBytes())});
-        byte[] bytes = PGUtil.pgObjectToByteArray(info);
-        byte[] buff = new byte[bytes.length + 32];
+        PGPojo info = PGUtil.newInstancePGObject(1141, sessionId1, seqNum, new byte[]{63},
+                new Object[]{new PG.chaxunluxiang(videoId, type, startTime.getBytes(), stopTime.getBytes())});
+        seqNum += 1;
+        byte[] pg = PGUtil.pgObjectToByteArray(info);
+        byte[] buff = new byte[pg.length + 32];
         byte[] array = new byte[32];
-        final byte[] bytes1 = "1040020050000001".getBytes();
-
-        System.arraycopy(bytes1, 0, array, 0, bytes1.length);
+        final byte[] tem = "1040020050000001".getBytes();
+        System.arraycopy(tem, 0, array, 0, tem.length);
         System.arraycopy(array, 0, buff, 0, array.length);
-        System.arraycopy(bytes, 0, buff, 32, bytes.length);
+        System.arraycopy(pg, 0, buff, 32, pg.length);
         os.write(buff);
         Thread.sleep(1000);
+        os.flush();
+        s.shutdownOutput();
         // 读取服务器返回的消息
         ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
         int len = -1;
+        byte[] buffer = new byte[24];
         while ((len = is.read(buffer)) != -1) {
             outSteam.write(buffer, 0, len);
         }
+
         byte[] byteArray = outSteam.toByteArray();
+        System.out.println(byteArray);
+        is.close();
+        os.close();
+        s.close();
         //拆包
-        final ArrayList<String> list = new ArrayList<>();
-        int lens = (byteArray.length - 12) / 208;
-        int totallength = byteArray.length - 12;
+        int lens = 0;
+        int totallength = 0;
+        ArrayList<String> list = new ArrayList<>();
+        lens = (byteArray.length - 12) / 208;
+        totallength = byteArray.length - 12;
 
         for (int i = 1; i <= lens; i++) {
             byte[] b = new byte[128];
             System.arraycopy(byteArray, totallength - 80 * i - 128 * (i - 1), b, 0, 128);
-            PGPojo pgPojo = PGUtil.newInstancePGObject(1143, 0, 0, new byte[64],
-                    new Object[]{new PG.CPTYPE_STORAGEDATA(3, 1, "sd".getBytes(), "dsf".getBytes(), new byte[256], b, 1)});
+             /*
+             新创建连接
+              */
+            Socket socket = new Socket("192.168.12.32", 8998);
+            InputStream in = socket.getInputStream();
+            OutputStream out = socket.getOutputStream();
+            PGPojo pgPojo = PGUtil.newInstancePGObject(1143, 0, seqNum, new byte[64],
+                    new Object[]{new PG.CPTYPE_STORAGEDATA(videoId, type, startTime.getBytes(), stopTime.getBytes(), new byte[256], b, 1)});
+            seqNum += 1;
             byte[] info2 = PGUtil.pgObjectToByteArray(pgPojo);
-            os.write(info2);
-            while ((len = is.read(buffer)) != -1) {
-                outSteam.write(buffer, 0, len);
+            ByteArrayOutputStream byteoutSteam = new ByteArrayOutputStream();
+            out.write(info2);
+            Thread.sleep(1000);
+            out.flush();
+            socket.shutdownOutput();
+            while ((len = in.read(buffer)) != -1) {
+                byteoutSteam.write(buffer, 0, len);
             }
-            byte[] by = outSteam.toByteArray();
+            byte[] by = byteoutSteam.toByteArray();
+            //关闭连接
+            in.close();
+            out.close();
+            socket.close();
             byte[] b2 = new byte[256];
             System.arraycopy(byteArray, by.length - 216, b2, 0, 256);
-            byte[] temp = new byte[64];
+            byte[] temp = new byte[256];
             is.read(temp);
             final String url = new String(temp);
             list.add(url);
         }
         /*
-        创建一个新的连接
+        UDPServer服务端
          */
-        Socket ss = new Socket("192.168.12.32", 8998);
+        final InetAddress address = InetAddress.getLocalHost();
+        int port = udpPort;
+        final DatagramSocket udpsocket = new DatagramSocket(port, address);
         /*
-        创建一个UDP连接
+        创建一个新连接
          */
-
+        Socket ss = new Socket("192.168.12.201", 554);
         // 构建IO
-        InputStream in = ss.getInputStream();
         OutputStream out = ss.getOutputStream();
+        InputStream in = ss.getInputStream();
         for (int i = 0; i < list.size(); i++) {
-            final String newurl = list.get(i);
-            byte[] data1 = (newurl + "User-Agent:GDDWStation/1.0Accept:application/sdpCSeq:1").getBytes();
-            out.write(data1);
-            out.flush();
-            Thread.sleep(2000);
-            byte[] data2 = (newurl + "Transport:PGSP/AVP;unicast;destination=192.168.10.101;client_port=9405CSeq:2").getBytes();
-            out.write(data2);
-            out.flush();
-            Thread.sleep(2000);
-            byte[] data3 = (newurl + "Range:clock=20121219T002440ZScale:1.0CSeq:3Session:13559105531869000763").getBytes();
-            out.write(data3);
-            out.flush();
-            Thread.sleep(2000);
-            byte[] data4 = (newurl + "Scale:0.5CSeq: 6Session：13559105531869000763").getBytes();
-            out.write(data4);
+            String s1 = "DESCRIBE " + list.get(i) + "RTSP/1.0\r\n" +
+                    "User-Agent:GDDWStation/1.0\r\n" +
+                    "Accept:application/sdp\r\n" +
+                    "CSeq:" + CSeq;
+            final PrintWriter writer = new PrintWriter(out);
+            writer.write(s1);
+            writer.flush();
+            String s2 = "SETUP " + list.get(i) + "RTSP/1.0\r\n" +
+                    "Transport:PGSP/AVP;unicast;destination=192.168.12.188;client_port=9405\r\n"
+                    + "CSeq:" + 1;
+            writer.write(s2);
+            writer.flush();
+            //接受rpu到主站的回复url,主要是拆包获取session
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(in, "GBK"));
+            String data = null;
+            while ((data = reader.readLine()) != null) {
+                System.out.println("返回信息为" + data);
+            }
+            final StringBuilder builder = new StringBuilder(data);
+            final String sessionid = builder.substring(data.length() - 28);
 
-            out.flush();
-            Thread.sleep(2000);
-            byte[] data5 = (newurl + "CSeq:7Session:13559105531869000763").getBytes();
-            out.write(data5);
-            out.flush();
-            Thread.sleep(2000);
-            byte[] data6 = (newurl + "User-Agent:GDDWStation/1.0Accept:application/sdpCSeq:1").getBytes();
-            out.write(data6);
-            out.flush();
-            Thread.sleep(2000);
-            byte[] data7 = (newurl + "User-Agent:GDDWStation/1.0Accept:application/sdpCSeq:1").getBytes();
-            out.write(data7);
-            out.flush();
-            Thread.sleep(2000);
-            byte[] data8 = (newurl + "User-Agent:GDDWStation/1.0Accept:application/sdpCSeq:1").getBytes();
-            out.write(data8);
-            out.flush();
-
+            String s3 = "PLAY " + list.get(i) + "RTSP/1.0\r\n" +
+                    "Range:clock=20121219T002440Z\r\n" +
+                    "Scale:1.0\r\n" +
+                    "CSeq:" + CSeq + "\r\n" +
+                    sessionid;
+            writer.write(s3);
+            writer.flush();
+            //建立udp接收数据//会话保活
+            final UdpThread udp = new UdpThread(i);
+            final OPTIONSThread option = new OPTIONSThread(list, i, writer);
+            udp.start();
+            option.start();
+            //关闭rtsp连接
+            String s4 = "TEARDOWN " + list.get(i) + "RTSP/1.0\r\n" +
+                    "Range:clock=20121219T002440Z\r\n" +
+                    "Scale:1.0\r\n" +
+                    "CSeq:4\r\n" +
+                    sessionid;
+            writer.write(s4);
+            writer.flush();
         }
-
     }
 
-
     /*
-    获取配置文件的内容
+    获取配置文件的内容 多添加一个倍数播放参数
      */
-    public String getUrlValue(String urlName) {
+    public static String getUrlValue(String urlName) {
         String url = null;
         Properties prop = new Properties();
         try {
@@ -128,7 +171,6 @@ public class VideoContro {
             }
             in.close();
         } catch (Exception e) {
-
         }
         return url;
     }
