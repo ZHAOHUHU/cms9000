@@ -611,7 +611,8 @@ public interface PG {
             this.type = type;
             System.arraycopy(starttime, 0, this.starttime, 0, starttime.length);
             System.arraycopy(stoptime, 0, this.stoptime, 0, stoptime.length);
-            System.arraycopy(filename, 0, this.filename, 0, filename.length);
+          //  System.arraycopy(filename, 0, this.filename, 0, filename.length);
+            this.filename=filename;
             System.arraycopy(url, 0, this.url, 0, url.length);
             this.icompression = icompression;
         }

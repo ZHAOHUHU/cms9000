@@ -6,10 +6,10 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 
 public class UdpThread extends Thread {
-    private int i;
+    private String name;
 
-    public UdpThread(int i) {
-        this.i = i;
+    public UdpThread(String name) {
+        this.name = name;
     }
 
     @Override
@@ -20,7 +20,7 @@ public class UdpThread extends Thread {
         try {
             final DatagramSocket socket = new DatagramSocket();
             socket.receive(pack);
-            String filename = "C:/" + i + ".PGSP";
+            String filename = "C:/" + name + ".PGSP";
             final File file = new File(filename);
             if (!file.exists()) {
                 file.mkdir();
@@ -28,6 +28,7 @@ public class UdpThread extends Thread {
             final FileOutputStream out = new FileOutputStream(file);
             final BufferedOutputStream buf = new BufferedOutputStream(out);
             int len;
+
             while ((len = pack.getLength()) != 0) {
                 buf.write(temp, 0, len);
             }

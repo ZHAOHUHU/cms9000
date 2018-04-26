@@ -28,8 +28,8 @@ public class VideoContro {
         // 构建IO
         InputStream is = s.getInputStream();
         OutputStream os = s.getOutputStream();
-        PGPojo info = PGUtil.newInstancePGObject(1141, sessionId1, seqNum, new byte[]{63},
-                new Object[]{new PG.chaxunluxiang(videoId, type, startTime.getBytes(), stopTime.getBytes())});
+        PGPojo info = PGUtil.newInstancePGObject(1141, 0, seqNum, new byte[]{63},
+                new Object[]{new PG.chaxunluxiang(6, 0, startTime.getBytes(), stopTime.getBytes())});
         seqNum += 1;
         byte[] pg = PGUtil.pgObjectToByteArray(info);
         byte[] buff = new byte[pg.length + 32];
@@ -45,7 +45,7 @@ public class VideoContro {
         // 读取服务器返回的消息
         ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
         int len = -1;
-        byte[] buffer = new byte[24];
+        byte[] buffer = new byte[1024];
         while ((len = is.read(buffer)) != -1) {
             outSteam.write(buffer, 0, len);
         }
@@ -60,23 +60,36 @@ public class VideoContro {
         int totallength = 0;
         ArrayList<String> list = new ArrayList<>();
         lens = (byteArray.length - 12) / 208;
-        totallength = byteArray.length - 12;
 
         for (int i = 1; i <= lens; i++) {
             byte[] b = new byte[128];
-            System.arraycopy(byteArray, totallength - 80 * i - 128 * (i - 1), b, 0, 128);
+            int srcpos=208*(lens-1)+92;
+            System.arraycopy(byteArray, srcpos, b, 0, 128);
+            byte[] startime = new byte[32];
+            System.arraycopy(byteArray, 208*(lens-1)+24, startime, 0, 32);
+            byte[] stoptime = new byte[32];
+            System.arraycopy(byteArray, 208*(lens-1)+56, stoptime, 0, 32);
              /*
              新创建连接
               */
             Socket socket = new Socket("192.168.12.32", 8998);
             InputStream in = socket.getInputStream();
             OutputStream out = socket.getOutputStream();
-            PGPojo pgPojo = PGUtil.newInstancePGObject(1143, 0, seqNum, new byte[64],
-                    new Object[]{new PG.CPTYPE_STORAGEDATA(videoId, type, startTime.getBytes(), stopTime.getBytes(), new byte[256], b, 1)});
+            PGPojo pgPojo = PGUtil.newInstancePGObject(1143, sessionId2, seqNum, new byte[]{64},
+                    new Object[]{new PG.CPTYPE_STORAGEDATA(videoId, type, startime, stoptime,b,new byte[256], 1)});
             seqNum += 1;
             byte[] info2 = PGUtil.pgObjectToByteArray(pgPojo);
+            /*
+            添加32位编码
+             */
+            byte[] buff2 = new byte[info2.length + 32];
+            byte[] array2 = new byte[32];
+            final byte[] tem2 = "1040020050000001".getBytes();
+            System.arraycopy(tem2, 0, array2, 0, tem2.length);
+            System.arraycopy(array2, 0, buff2, 0, array2.length);
+            System.arraycopy(info2, 0, buff2, 32, info2.length);
             ByteArrayOutputStream byteoutSteam = new ByteArrayOutputStream();
-            out.write(info2);
+            out.write(buff2);
             Thread.sleep(1000);
             out.flush();
             socket.shutdownOutput();
@@ -89,10 +102,11 @@ public class VideoContro {
             out.close();
             socket.close();
             byte[] b2 = new byte[256];
-            System.arraycopy(byteArray, by.length - 216, b2, 0, 256);
-            byte[] temp = new byte[256];
-            is.read(temp);
-            final String url = new String(temp);
+            //返回固定长度476字节
+            System.arraycopy(by, 216, b2, 0, 256);
+            is.read(b2);
+            final String url = new String(b2,"gb2312");
+            System.out.println(url);
             list.add(url);
         }
         /*
@@ -138,7 +152,7 @@ public class VideoContro {
             writer.write(s3);
             writer.flush();
             //建立udp接收数据//会话保活
-            final UdpThread udp = new UdpThread(i);
+            final UdpThread udp = new UdpThread(":");
             final OPTIONSThread option = new OPTIONSThread(list, i, writer);
             udp.start();
             option.start();
