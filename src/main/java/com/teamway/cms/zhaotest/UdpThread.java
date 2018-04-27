@@ -20,7 +20,7 @@ public class UdpThread extends Thread {
         }
         try {
             socket.receive(pack);
-            String filename = "F:/" + name;
+            String filename = VideoContro.getUrlValue("filepath") + name;
             final FileOutputStream out = new FileOutputStream(filename);
             final BufferedOutputStream buf = new BufferedOutputStream(out);
             int len = 0;

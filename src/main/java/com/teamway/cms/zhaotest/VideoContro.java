@@ -14,6 +14,9 @@ import java.util.*;
 /////////
 public class VideoContro {
     public static void main(String[] args) throws IOException, InterruptedException {
+        System.out.println(VideoContro.getUrlValue("ok"));
+        final int rtspport = Integer.parseInt(VideoContro.getUrlValue("rtspport"));
+        final String rtspip = VideoContro.getUrlValue("rtspip");
         final int videoId = Integer.parseInt(VideoContro.getUrlValue("videoId"));
         final int udpPort = Integer.parseInt(VideoContro.getUrlValue("udpPort"));
         final int type = Integer.parseInt(VideoContro.getUrlValue("type"));
@@ -50,7 +53,6 @@ public class VideoContro {
         while ((len = is.read(buffer)) != -1) {
             outSteam.write(buffer, 0, len);
         }
-
         byte[] byteArray = outSteam.toByteArray();
         is.close();
         os.close();
@@ -108,7 +110,6 @@ public class VideoContro {
             //读取url
             is.read(b2);
             final String url = new String(b2, "gb2312");
-            System.out.println(url.trim());
             final String substring = url.substring(7, 21);
             final String ip2ip = VideoContro.ip2ip(substring);
             final long ip2Long = VideoContro.ip2Long(ip2ip);
@@ -117,21 +118,11 @@ public class VideoContro {
             is.read(b);
             final String url2 = new String(b, "gb2312");
             listname.add(url2.trim());
-
         }
-        /*
-        UDPServer服务端
-         */
-        final InetAddress address = InetAddress.getLocalHost();
-        int port = udpPort;
-        /*
-        创建一个新连接
-         */
-        final int rtspport = Integer.parseInt(VideoContro.getUrlValue("rtspport"));
-        final String rtspip = VideoContro.getUrlValue("rtspip");
         for (int i = 0; i < list.size(); i++) {
-            final DatagramSocket udpsocket = new DatagramSocket(port, address);
-            System.out.println("第" + i + "次执行");
+            System.out.println("循环开始");
+             //  UDPServer服务端
+            final DatagramSocket udpsocket = new DatagramSocket(udpPort, InetAddress.getLocalHost());
             Socket ss = new Socket(rtspip, rtspport);
             // 构建IO
             OutputStream out = ss.getOutputStream();
@@ -142,12 +133,16 @@ public class VideoContro {
                     "CSeq:1\r\n";
             out.write(s1.getBytes());
             out.flush();
+            Thread.sleep(2000);
+            System.out.println("第" + i + "次执DESCRIBE行");
 
             String s2 = "SETUP " + "rtsp://" + rtspip + ":" + rtspport + "/" + list.get(i) + ":" + rtspport + "/" + listname.get(i) + " RTSP/1.0\r\n" +
                     "Transport:PGSP/AVP;unicast;destination=192.168.12.188;client_port=9405\r\n"
                     + "CSeq:2\r\n";
             out.write(s2.getBytes());
             out.flush();
+            Thread.sleep(2000);
+            System.out.println("第" + i + "次执行setup");
             //接受rpu到主站的回复url,主要是拆包获取session
             final BufferedReader reader = new BufferedReader(new InputStreamReader(in, "GBK"));
             final StringBuffer stringBuffer = new StringBuffer();
@@ -155,6 +150,7 @@ public class VideoContro {
             line = reader.readLine();
             int index = -1;
             while (line != null) {
+                //System.out.println("能不能执行到readline");
                 if (line.contains("Session")) {
                     stringBuffer.append(line);
                     line = reader.readLine();
@@ -163,8 +159,9 @@ public class VideoContro {
                 stringBuffer.append(line);
                 line = reader.readLine();
             }
-            index = stringBuffer.indexOf("9");
-            final String sessionid = stringBuffer.substring(index - 14, index + 4);
+            index = stringBuffer.indexOf("Session");
+            final String sessionid = stringBuffer.substring(index, index+18);
+            System.out.println(sessionid);
             //找到session立即抓起来
             Map<String, String> map = new HashMap();
             map.put("sessionid", sessionid);
@@ -184,8 +181,10 @@ public class VideoContro {
             udp.join();
             //终止循环
             option.setB(false);
-            System.out.println("执行到这里了");
-
+            //关闭rtsp连接
+            ss.close();
+            System.out.println("执行到循环末尾了");
+            Thread.sleep(3000);
         }
     }
 
@@ -238,5 +237,13 @@ public class VideoContro {
         final String c = b1.substring(0, i2);
         final String d = b1.substring(i2 + 1);
         return d + "." + c + "." + b + "." + a;
+    }
+    /*
+    更简单的调换位置
+     */
+    public static String easyip2ip(String ip){
+        String[] m = ip.split("//.");
+        String newip=m[3]+"."+m[2]+"."+m[1]+"."+m[0];
+        return newip;
     }
 }

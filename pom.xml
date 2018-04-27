@@ -9,8 +9,8 @@
     <version>1.0.1</version>
 
     <properties>
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
@@ -80,7 +80,6 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.2</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
@@ -95,63 +94,47 @@
         </dependency>
     </dependencies>
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.teamway.cms.application.Application</mainClass>
-                        </manifest>
-                        <manifestEntries>
-                            <Class-Path>./</Class-Path>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-
-        </plugins>
-
+        <!--如果其他地方也有配置文件就用这个导入
+         assembly不支持resources文件自动导入所以就手写一下把-->
         <resources>
 
-            <!--
-      <resource>
-          <directory>src/main/resources</directory>
-          <filtering>true</filtering>
-          <includes>
-              <include>**/*.*</include>
-          </includes>
-          <excludes>
-          <exclude>**/*.xml</exclude>
-          <exclude>**/*.properties</exclude>
-           <exclude>**/*.json</exclude>
-          </excludes>
-      </resource>
-      -->
-            <!-- 
             <resource>
-              	    <directory>src/main/resources</directory>  
-            		<targetPath>resources</targetPath>  
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>*.properties</include>
+                </includes>
             </resource>
-             -->
         </resources>
+        <!--========================================-->
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <!--代表组装描述引用打包的时候是否引用其他的配置文件如果
+                    就这么单独一个就写这个jar一个就行-->
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <!--主函数入口-->
+                        <manifest>
+                            <mainClass>com.teamway.cms.zhaotest.VideoContro</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
 
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
-
 
 </project>
