@@ -1,43 +1,47 @@
 package com.teamway.cms.zhaotest;
-
 import java.io.*;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-
+import java.net.*;
 public class UdpThread extends Thread {
     private String name;
-
-    public UdpThread(String name) {
+    private DatagramSocket socket;
+    public UdpThread(String name, DatagramSocket socket) {
         this.name = name;
+        this.socket = socket;
     }
-
     @Override
     public void run() {
-
-        final byte[] temp = new byte[1024];
+        System.out.println("走这里立马");
+        final byte[] temp = new byte[50 * 1024];
         final DatagramPacket pack = new DatagramPacket(temp, temp.length);
         try {
-            final DatagramSocket socket = new DatagramSocket();
-            socket.receive(pack);
-            String filename = "C:/" + name + ".PGSP";
-            final File file = new File(filename);
-            if (!file.exists()) {
-                file.mkdir();
-            }
-            final FileOutputStream out = new FileOutputStream(file);
-            final BufferedOutputStream buf = new BufferedOutputStream(out);
-            int len;
-
-            while ((len = pack.getLength()) != 0) {
-                buf.write(temp, 0, len);
-            }
-            System.out.println("存储成功");
-            out.close();
-            socket.close();
-
+            socket.setSoTimeout(3000);
         } catch (SocketException e) {
             e.printStackTrace();
+        }
+        try {
+            socket.receive(pack);
+            String filename = "F:/" + name;
+            final FileOutputStream out = new FileOutputStream(filename);
+            final BufferedOutputStream buf = new BufferedOutputStream(out);
+            int len = 0;
+            int flushSize = 0;
+            while ((len = pack.getLength()) != 0) {
+                buf.write(temp, 0, len);
+                if (++flushSize % 1000 == 0) {
+                    flushSize = 0;
+                    buf.flush();
+                }
+                try {
+                    socket.receive(pack);
+                }catch (InterruptedIOException e){
+                    out.close();
+                    socket.close();
+                    break;
+                }
+            }
+            System.out.println("存储成功");
+
+        } catch (SocketException e) {
         } catch (IOException e) {
             e.printStackTrace();
         }

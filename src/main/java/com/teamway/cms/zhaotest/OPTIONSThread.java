@@ -4,33 +4,56 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 public class OPTIONSThread extends Thread {
     private List list;
+    private List listname;
     private int i;
-   private PrintWriter writer;
+    private OutputStream out;
+    private int CSeq;
+    private Map session;
+    private boolean b;
+    private String rtspip;
+    private  int rtspport;
 
-    public OPTIONSThread(List list, int i, PrintWriter writer) {
+    public boolean isB() {
+        return b;
+    }
+
+    public void setB(boolean b) {
+        this.b = b;
+    }
+    public OPTIONSThread(List listname, int rtspport, String rtspip, List list, int i, OutputStream out, int CSeq, Map session, boolean b) {
         this.list = list;
+        this.listname = listname;
         this.i = i;
-        this.writer = writer;
+        this.out = out;
+        this.CSeq = CSeq;
+        this.session = session;
+        this.b=b;
+        this.rtspip=rtspip;
+        this.rtspport=rtspport;
     }
 
     @Override
     public void run() {
 
-        for (; ; ) {
-            String s3 = "OPTIONS " + list.get(i) + "RTSP/1.0\r\n" +
+        while(b) {
+            String s3 = "OPTIONS " +"rtsp://"+ rtspip + ":" + rtspport + "/" + list.get(i) + ":" + rtspport + "/"+listname.get(i)+" RTSP/1.0\r\n" +
                     "Range:clock=20121219T002440Z\r\n" +
-                    "Scale:1.0\r\n" +
-                    "CSeq:3\r\n" +
-                    "Session:13559105531869000763";
+                    "Scale:"+CSeq+"\r\n" +
+                    "CSeq:\r\n" +
+                    session.get("sessionid") + "\r\n";
             try {
-                writer.write(s3);
+                out.write(s3.getBytes());
+                out.flush();
                 Thread.sleep(1000 * 30);
-            }  catch (InterruptedException e) {
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
+        }
 }

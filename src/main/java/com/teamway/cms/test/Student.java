@@ -12,7 +12,7 @@ public class Student extends Thread {
         for (int i = 0; i < 50; i++) {
             System.out.println("我是一个学生" + str);
             try {
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
